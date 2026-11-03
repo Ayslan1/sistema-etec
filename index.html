@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Atendimento ao Aluno - ETEC</title>
+    <!-- Tailwind CSS para Estilização Moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-slate-50 font-sans text-slate-800">
+
+    <!-- Topo / Header com a Marca da ETEC e Centro Paula Souza -->
+    <header class="bg-[#B21F24] text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Logo ETEC & CPS -->
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white p-2 rounded-lg shadow-sm flex items-center justify-center">
+                        <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 20H90V35H25V45H85V60H25V75H90V90H10V20Z" fill="#B21F24" />
+                            <rect x="10" y="5" width="20" height="10" fill="#2C3E50" />
+                        </svg>
+                    </div>
+                    <div class="border-l border-red-400/50 pl-3">
+                        <div class="flex items-center gap-2">
+                            <span class="font-extrabold text-2xl tracking-wider uppercase font-mono">etec</span>
+                            <span class="text-xs bg-red-800 text-white font-semibold px-2 py-0.5 rounded">SP</span>
+                        </div>
+                        <p class="text-xs text-red-100 font-medium tracking-tight">Centro Paula Souza • Governo de SP</p>
+                    </div>
+                </div>
+
+                <!-- Menu Aluno Logado -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center gap-3 bg-red-900/40 px-3 py-1.5 rounded-full border border-red-400/30">
+                        <div class="bg-white/20 p-1.5 rounded-full">
+                            <i data-lucide="user" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div class="text-right">
+                            <p id="student-name" class="text-xs font-semibold leading-none">Maria Eduarda Silva</p>
+                            <p class="text-[10px] text-red-200 mt-0.5">RM: <span id="student-rm">202410928</span></p>
+                        </div>
+                    </div>
+                    
+                    <button title="Notificações" class="p-2 text-red-100 hover:text-white hover:bg-red-800 rounded-full transition relative">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-400 rounded-full ring-2 ring-red-700"></span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Faixa Secundária de Informação do Curso -->
+        <div class="bg-[#8E171B] border-t border-red-800/60 px-4 py-2 text-xs text-red-100">
+            <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="graduation-cap" class="w-4 h-4 text-red-300"></i>
+                    <span class="font-medium text-white">Técnico em Desenvolvimento de Sistemas</span>
+                    <span class="text-red-300">•</span>
+                    <span>3º Semestre (Noturno)</span>
+                </div>
+                <div class="flex items-center gap-2 text-red-200">
+                    <i data-lucide="building-2" class="w-3.5 h-3.5"></i>
+                    <span>ETEC Bento Quirino (Campinas - SP)</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Navegação por Abas -->
+        <div class="flex flex-wrap gap-2 mb-8 border-b border-slate-200 pb-4">
+            <button onclick="switchTab('requests')" id="btn-requests" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all bg-[#B21F24] text-white shadow-md shadow-red-900/10">
+                <i data-lucide="file-text" class="w-4 h-4"></i> Meus Requerimentos
+            </button>
+            <button onclick="switchTab('new')" id="btn-new" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i> Novo Requerimento
+            </button>
+            <button onclick="switchTab('schedule')" id="btn-schedule" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">
+                <i data-lucide="calendar" class="w-4 h-4"></i> Agendamento Presencial
+            </button>
+            <button onclick="switchTab('faq')" id="btn-faq" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">
+                <i data-lucide="help-circle" class="w-4 h-4"></i> Central de Ajuda (FAQ)
+            </button>
+        </div>
+
+        <!-- ABA 1: MEUS REQUERIMENTOS -->
+        <div id="tab-requests" class="tab-content grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-5 space-y-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
+                        <input type="text" id="search-input" oninput="filterRequests()" placeholder="Buscar por código ou tipo..." class="w-full pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#B21F24]">
+                    </div>
+                </div>
+                <div id="requests-list" class="space-y-3 max-h-[600px] overflow-y-auto pr-1"></div>
+            </div>
+            <div class="lg:col-span-7" id="request-details"></div>
+        </div>
+
+        <!-- ABA 2: NOVO REQUERIMENTO -->
+        <div id="tab-new" class="tab-content hidden max-w-3xl mx-auto bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8">
+            <div class="border-b border-slate-200 pb-4 mb-6">
+                <h2 class="text-xl font-bold text-slate-800">Abrir Novo Requerimento Acadêmico</h2>
+                <p class="text-xs text-slate-500 mt-1">Preencha com atenção os campos abaixo para envio direto à Secretaria Acadêmica.</p>
+            </div>
+            <div id="success-alert" class="hidden mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center gap-3 text-emerald-800">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 flex-shrink-0"></i>
+                <p class="text-sm font-medium">Requerimento gerado com sucesso!</p>
+            </div>
+            <form onsubmit="handleNewRequest(event)" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Tipo de Requerimento *</label>
+                    <select id="new-type" required class="w-full border border-slate-300 rounded-lg p-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#B21F24]">
+                        <option value="">-- Selecione o serviço --</option>
+                        <option value="Declaração de Matrícula">Declaração de Matrícula</option>
+                        <option value="Histórico Escolar Parcial">Histórico Escolar Parcial</option>
+                        <option value="Aproveitamento de Estudos">Aproveitamento de Estudos</option>
+                        <option value="Trancamento de Matrícula">Trancamento de Matrícula</option>
+                        <option value="Segunda Via de Carteirinha">Segunda Via de Carteirinha</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Justificativa e Detalhes *</label>
+                    <textarea id="new-desc" required rows="4" placeholder="Explique o motivo do seu requerimento..." class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B21F24]"></textarea>
+                </div>
+                <div class="pt-4 border-t border-slate-200 flex justify-end">
+                    <button type="submit" class="px-6 py-2.5 rounded-lg bg-[#B21F24] hover:bg-[#8E171B] text-white text-sm font-medium flex items-center gap-2 shadow-md transition">
+                        <i data-lucide="send" class="w-4 h-4"></i> Enviar Requerimento
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ABA 3: AGENDAMENTO PRESENCIAL -->
+        <div id="tab-schedule" class="tab-content hidden grid grid-cols-1 md:grid-cols-12 gap-8">
+            <div class="md:col-span-7 bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-800 mb-1">Agendar Atendimento Presencial</h2>
+                <p class="text-xs text-slate-500 mb-6">Evite filas agendando o seu horário na secretaria.</p>
+                <form onsubmit="handleSchedule(event)" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Serviço</label>
+                        <select id="sch-service" class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B21F24]">
+                            <option value="Retirada de Documentos">Retirada de Documentos / Diplomas</option>
+                            <option value="Contrato de Estágio">Termo de Compromisso de Estágio</option>
+                            <option value="Atendimento com Coordenação">Atendimento com Coordenação</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Data</label>
+                            <input type="date" id="sch-date" required class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B21F24]">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Horário</label>
+                            <select id="sch-time" required class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B21F24]">
+                                <option value="">-- Selecione --</option>
+                                <option value="14:00">14:00h</option>
+                                <option value="15:20">15:20h</option>
+                                <option value="19:15">19:15h (Noite)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white font-semibold text-sm rounded-lg shadow transition">Confirmar Agendamento</button>
+                </form>
+            </div>
+            <div class="md:col-span-5" id="schedule-result">
+                <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-red-900 space-y-3">
+                    <h4 class="font-bold text-sm flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-[#B21F24]"></i> Horários da Secretaria</h4>
+                    <ul class="text-xs space-y-2">
+                        <li>• Manhã: 08h00 às 11h30</li>
+                        <li>• Tarde: 13h30 às 17h00</li>
+                        <li>• Noite: 18h30 às 21h00</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA 4: FAQ -->
+        <div id="tab-faq" class="tab-content hidden max-w-4xl mx-auto space-y-4">
+            <div class="text-center max-w-xl mx-auto mb-8">
+                <h2 class="text-2xl font-bold text-slate-800">Perguntas Frequentes</h2>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="font-semibold text-slate-800 text-base mb-2">Qual o prazo padrão para emissão de Declarações?</h3>
+                <p class="text-slate-600 text-sm">Declarações simples possuem emissão digital imediata ou em até 2 dias úteis.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="font-semibold text-slate-800 text-base mb-2">Como agendar atendimento presencial?</h3>
+                <p class="text-slate-600 text-sm">Basta utilizar a aba de Agendamento Presencial neste portal e gerar o seu comprovante.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-slate-900 text-slate-400 text-xs border-t border-slate-800 mt-16 py-8 text-center">
+        <p class="font-semibold text-slate-200">ETEC - Escola Técnica Estadual | Centro Paula Souza</p>
+        <p class="text-[11px] text-slate-500 mt-1">Governo do Estado de São Paulo</p>
+    </footer>
+
+    <!-- Script de Interatividade -->
+    <script>
+        // Inicializar ícones
+        lucide.createIcons();
+
+        let requests = [
+            { id: "REQ-2026-0841", type: "Declaração de Matrícula", category: "Documentos", date: "28/10/2026", status: "Pronto para Retirada", color: "bg-emerald-100 text-emerald-800 border-emerald-300", desc: "Necessito da declaração atualizada para fins de estágio.", downloadable: true },
+            { id: "REQ-2026-0792", type: "Aproveitamento de Estudos", category: "Pedagógico", date: "15/10/2026", status: "Em Análise", color: "bg-amber-100 text-amber-800 border-amber-300", desc: "Solicito dispensa de componente curricular.", downloadable: false }
+        ];
+
+        let selectedReqId = requests[0].id;
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-[#B21F24]', 'text-white', 'shadow-md');
+                el.classList.add('bg-white', 'text-slate-600', 'border');
+            });
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.add('bg-[#B21F24]', 'text-white', 'shadow-md');
+            activeBtn.classList.remove('bg-white', 'text-slate-600');
+        }
+
+        function renderRequests(filterText = '') {
+            const listContainer = document.getElementById('requests-list');
+            listContainer.innerHTML = '';
+            
+            const filtered = requests.filter(r => r.type.toLowerCase().includes(filterText.toLowerCase()) || r.id.toLowerCase().includes(filterText.toLowerCase()));
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = `<div class="bg-white p-6 text-center rounded-xl border text-slate-500 text-sm">Nenhum requerimento encontrado.</div>`;
+                return;
+            }
+
+            filtered.forEach(req => {
+                const isSelected = req.id === selectedReqId;
+                const div = document.createElement('div');
+                div.className = `p-4 rounded-xl border cursor-pointer transition ${isSelected ? 'bg-white border-[#B21F24] ring-2 ring-red-100 shadow-md' : 'bg-white border-slate-200 hover:border-slate-300'}`;
+                div.onclick = () => { selectedReqId = req.id; renderRequests(document.getElementById('search-input').value); renderDetails(); };
+                div.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-mono font-bold text-slate-500">${req.id}</span>
+                        <span class="text-xs px-2.5 py-0.5 rounded-full border font-semibold ${req.color}">${req.status}</span>
+                    </div>
+                    <h4 class="font-semibold text-slate-800 text-base mb-1">${req.type}</h4>
+                    <div class="flex items-center justify-between text-xs text-slate-500 mt-3 pt-2 border-t border-slate-100">
+                        <span>Aberto em: ${req.date}</span>
+                        <span class="text-[#B21F24] font-medium">Ver detalhes</span>
+                    </div>
+                `;
+                listContainer.appendChild(div);
+            });
+        }
+
+        function renderDetails() {
+            const container = document.getElementById('request-details');
+            const req = requests.find(r => r.id === selectedReqId);
+            if (!req) return;
+
+            container.innerHTML = `
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="bg-slate-800 text-white p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-xs font-mono text-slate-300 uppercase">Protocolo ${req.id}</span>
+                                <h2 class="text-xl font-bold mt-1">${req.type}</h2>
+                            </div>
+                            <span class="text-xs px-3 py-1 rounded-full border font-semibold ${req.color}">${req.status}</span>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div>
+                            <h3 class="text-xs font-semibold text-slate-400 uppercase mb-2">Descrição</h3>
+                            <div class="bg-slate-50 p-4 rounded-lg border text-sm text-slate-700">${req.desc}</div>
+                        </div>
+                        ${req.downloadable ? `
+                            <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex items-center justify-between">
+                                <span class="text-sm font-semibold text-emerald-900">Documento disponível para download</span>
+                                <button onclick="alert('Baixando PDF autenticado...')" class="bg-emerald-600 text-white text-xs font-semibold px-4 py-2 rounded-lg">Baixar PDF</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterRequests() {
+            const query = document.getElementById('search-input').value;
+            renderRequests(query);
+        }
+
+        function handleNewRequest(e) {
+            e.preventDefault();
+            const type = document.getElementById('new-type').value;
+            const desc = document.getElementById('new-desc').value;
+            
+            const newReq = {
+                id: "REQ-2026-0" + Math.floor(100 + Math.random() * 900),
+                type: type,
+                category: "Secretaria",
+                date: new Date().toLocaleDateString('pt-BR'),
+                status: "Aguardando Secretaria",
+                color: "bg-amber-100 text-amber-800 border-amber-300",
+                desc: desc,
+                downloadable: false
+            };
+
+            requests.unshift(newReq);
+            selectedReqId = newReq.id;
+            
+            document.getElementById('success-alert').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('success-alert').classList.add('hidden');
+                switchTab('requests');
+                renderRequests();
+                renderDetails();
+            }, 1500);
+        }
+
+        function handleSchedule(e) {
+            e.preventDefault();
+            const service = document.getElementById('sch-service').value;
+            const date = document.getElementById('sch-date').value;
+            const time = document.getElementById('sch-time').value;
+
+            document.getElementById('schedule-result').innerHTML = `
+                <div class="bg-white border-2 border-dashed border-[#B21F24] p-6 rounded-xl text-center space-y-4 shadow-sm">
+                    <div class="w-12 h-12 bg-red-100 text-[#B21F24] rounded-full flex items-center justify-center mx-auto">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800">AGD-${Math.floor(1000 + Math.random() * 9000)}</h3>
+                    <div class="bg-slate-50 p-4 rounded-lg text-left text-xs space-y-2 border">
+                        <p><strong>Serviço:</strong> ${service}</p>
+                        <p><strong>Data & Hora:</strong> ${date} às ${time}</p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        // Renderização Inicial
+        renderRequests();
+        renderDetails();
+    </script>
+</body>
+</html>
